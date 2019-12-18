@@ -1,7 +1,8 @@
 import React from 'react';
 import MaterialTable, { Column } from 'material-table';
 
-interface Row {
+
+  interface Row {
     ID: number;
     IDK: number;
     name: string;
@@ -9,9 +10,9 @@ interface Row {
     price: number;
     nomPrice: number;
     div: boolean;
-}
+  }
 
-interface TableState {
+  interface TableState {
   columns: Array<Column<Row>>;
   data: Row[];
 }
@@ -27,9 +28,7 @@ export default function MaterialTableDemo() {
       { title: 'Номинальная цена', field: 'nomPrice' },
       { title: 'Дивиденды', field: 'div', lookup: { 1: '+', 2: '-' }, },
     ],
-    data: [
-      { ID: '1', IDK: '1', name: 'Газпром', code: 'GAZP', price: 249.08, nomPrice: 5, div: 1 },
-    ],
+    data: [{ ID: '1', IDK: '1', name: 'Газпром', code: 'GAZP', price: 249.08, nomPrice: 5, div: 1 },],
   });
 
   return (
