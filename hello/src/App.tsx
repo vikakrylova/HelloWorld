@@ -1,83 +1,79 @@
 import React from 'react';
+import MaterialTable, { Column } from 'material-table';
 
-const App: React.FC = () => {
-  return (
-    <body>
-      <h1>Акции</h1>
-
-      <table>
-        <thead>
-          <tr>
-            <th scope="col">ID акции</th>
-            <th scope="col">ID Курса</th>
-            <th scope="col">Название</th>
-            <th scope="col">Биржевой код</th>
-            <th scope="col">Цена покупки</th>
-            <th scope="col">Номинальная цена</th>
-            <th scope="col">Дивиденды</th>
-
-          </tr>
-        </thead>
-        <tbody>
-          <tr>
-            <th scope="row">1</th>
-            <td>1</td>
-            <td>Газпром</td>
-            <td>GAZP</td>
-            <td>249.08</td>
-            <td>5</td>
-            <td>+</td>
-          </tr>
-          <tr>
-            <th scope="row">2</th>
-            <td>2</td>
-            <td>Россети</td>
-            <td>RSTI</td>
-            <td>1.29</td>
-            <td>1</td>
-            <td>-</td>
-          </tr>
-          <tr>
-            <th scope="row">3</th>
-            <td>3</td>
-            <td>Мвидео</td>
-            <td>MVID</td>
-            <td>583,40</td>
-            <td>10</td>
-            <td>-</td>
-          </tr>
-          <tr>
-            <th scope="row">4</th>
-            <td>4</td>
-            <td>Татнефть</td>
-            <td>TATN</td>
-            <td>737.50</td>
-            <td>1</td>
-            <td>+</td>
-          </tr>
-          <tr>
-            <th scope="row">5</th>
-            <td>5</td>
-            <td>Яндекс</td>
-            <td>YNDX</td>
-            <td>2653,40</td>
-            <td></td>
-            <td>-</td>
-          </tr>
-          <tr>
-            <th scope="row">6</th>
-            <td>6</td>
-            <td>Сбербанк</td>
-            <td>SBER</td>
-            <td>241.55</td>
-            <td>3</td>
-            <td>+</td>
-          </tr>
-        </tbody>
-      </table>
-    </body>
-   
-  );
+interface Row {
+    ID: number;
+    IDK: number;
+    name: string;
+    code: string;
+    price: number;
+    nomPrice: number;
+    div: boolean;
 }
 
-export default App;
+interface TableState {
+  columns: Array<Column<Row>>;
+  data: Row[];
+}
+
+export default function MaterialTableDemo() {
+  const [state, setState] = React.useState<TableState>({
+    columns: [
+      { title: 'ID акции', field: 'ID' },
+      { title: 'ID курса', field: 'IDK' },
+      { title: 'Название', field: 'name'},
+      { title: 'Биржевой код', field: 'code'},
+      { title: 'Цена покупки', field: 'price' },
+      { title: 'Номинальная цена', field: 'nomPrice' },
+      { title: 'Дивиденды', field: 'div', lookup: { 1: '+', 2: '-' }, },
+    ],
+    data: [
+      { ID: '1', IDK: '1', name: 'Газпром', code: 'GAZP', price: 249.08, nomPrice: 5, div: 1 },
+    ],
+  });
+
+  return (
+    <MaterialTable
+      title="Editable Example"
+      columns={state.columns}
+      data={state.data}
+      editable={{
+        onRowAdd: newData =>
+          new Promise(resolve => {
+            setTimeout(() => {
+              resolve();
+              setState(prevState => {
+                const data = [...prevState.data];
+                data.push(newData);
+                return { ...prevState, data };
+              });
+            }, 600);
+          }),
+        onRowUpdate: (newData, oldData) =>
+          new Promise(resolve => {
+            setTimeout(() => {
+              resolve();
+              if (oldData) {
+                setState(prevState => {
+                  const data = [...prevState.data];
+                  data[data.indexOf(oldData)] = newData;
+                  return { ...prevState, data };
+                });
+              }
+            }, 600);
+          }),
+        onRowDelete: oldData =>
+          new Promise(resolve => {
+            setTimeout(() => {
+              resolve();
+              setState(prevState => {
+                const data = [...prevState.data];
+                data.splice(data.indexOf(oldData), 1);
+                return { ...prevState, data };
+              });
+            }, 600);
+          }),
+      } }
+    />
+  );
+}
