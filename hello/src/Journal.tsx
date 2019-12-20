@@ -1,42 +1,45 @@
 import React from 'react';
 import MaterialTable, { Column } from 'material-table';
+import EditIcon from '@material-ui/icons/Edit';
+import DeleteIcon from '@material-ui/icons/Delete';
+import Icon from '@material-ui/core/Icon';
+import 'date-fns';
+import Grid from '@material-ui/core/Grid';
+import DateFnsUtils from '@date-io/date-fns';
+import {
+  MuiPickersUtilsProvider,
+  KeyboardTimePicker,
+  KeyboardDatePicker,
+} from '@material-ui/pickers';
 
-
-  interface Row {
-    ID: number;
-    IDK: number;
-    name: string;
-    code: string;
-    price: number;
-    nomPrice: number;
-    div: boolean;
-  }
+  interface Row {}
 
   interface TableState {
   columns: Array<Column<Row>>;
   data: Row[];
-}
+  }
 
-export default function MaterialTableDemo() {
-  const [state, setState] = React.useState<TableState>({
+ export default function MaterialTableDemo() {
+  const [state, setState] = React.useState({
     columns: [
-      { title: 'ID акции', field: 'ID' },
-      { title: 'ID курса', field: 'IDK' },
-      { title: 'Название', field: 'name'},
-      { title: 'Биржевой код', field: 'code'},
-      { title: 'Цена покупки', field: 'price' },
-      { title: 'Номинальная цена', field: 'nomPrice' },
-      { title: 'Дивиденды', field: 'div', lookup: { 1: '+', 2: '-' }, },
+      { title: 'Журнал ID', field: 'ID' },
+      { title: 'ID акции', field: 'IDA' },
+      { title: 'Операция', field: 'action', lookup: { 1: 'Покупка', 2: 'Продажа' },},
+      { title: 'Дата', field: 'date', Date},
+      { title: 'Количество', field: 'count' },
+      { title: 'Прибыль', field: 'profit' },
     ],
-    data: [{ ID: '1', IDK: '1', name: 'Газпром', code: 'GAZP', price: 249.08, nomPrice: 5, div: 1 },],
+    data: [{ ID: '1', IDA: '2', action: 1, date: 12.12, count: 15, profit:-19.2 },
+            ],
+    
   });
 
   return (
     <MaterialTable
-      title="Editable Example"
+      title="Журнал"
       columns={state.columns}
       data={state.data}
-      editable={{
+      editable={{  
         onRowAdd: newData =>
           new Promise(resolve => {
             setTimeout(() => {
@@ -46,9 +49,9 @@ export default function MaterialTableDemo() {
                 data.push(newData);
                 return { ...prevState, data };
               });
-            }, 600);
+            }, 600);          
           }),
-        onRowUpdate: (newData, oldData) =>
+         onRowUpdate: (newData, oldData) =>
           new Promise(resolve => {
             setTimeout(() => {
               resolve();
@@ -61,18 +64,20 @@ export default function MaterialTableDemo() {
               }
             }, 600);
           }),
-        onRowDelete: oldData =>
+         onRowDelete: oldData => 
           new Promise(resolve => {
             setTimeout(() => {
               resolve();
               setState(prevState => {
                 const data = [...prevState.data];
-                data.splice(data.indexOf(oldData), 1);
+                data.splice(data.indexOf(oldData), 1); 
                 return { ...prevState, data };
               });
             }, 600);
+
           }),
       } }
     />
   );
 }
+
