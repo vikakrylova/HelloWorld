@@ -1,17 +1,5 @@
 import React from 'react';
 import MaterialTable, { Column } from 'material-table';
-import EditIcon from '@material-ui/icons/Edit';
-import DeleteIcon from '@material-ui/icons/Delete';
-import Icon from '@material-ui/core/Icon';
-import 'date-fns';
-import Grid from '@material-ui/core/Grid';
-import DateFnsUtils from '@date-io/date-fns';
-import {
-  MuiPickersUtilsProvider,
-  KeyboardTimePicker,
-  KeyboardDatePicker,
-} from '@material-ui/pickers';
-
   interface Row {}
 
   interface TableState {
@@ -19,7 +7,7 @@ import {
   data: Row[];
   }
 
- export default function MaterialTableDemo() {
+ export default function Journal() {
   const [state, setState] = React.useState({
     columns: [
       { title: 'Журнал ID', field: 'ID' },
@@ -30,7 +18,10 @@ import {
       { title: 'Прибыль', field: 'profit' },
     ],
     data: [{ ID: '1', IDA: '2', action: 1, date: 12.12, count: 15, profit:-19.2 },
-            ],
+           {ID: '2', IDA: '6', action: 2, date: 11.09, count: 8, profit:1932.4},
+           {ID: '3', IDA: '5', action: 2, date: 7.02, count: 3, profit:7960.2},
+           {ID: '4', IDA: '3', action: 1, date: 12.12, count: 9, profit:-5250.6}
+           ],
     
   });
 
@@ -80,4 +71,3 @@ import {
     />
   );
 }
-
